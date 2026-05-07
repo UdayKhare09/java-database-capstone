@@ -37,5 +37,4 @@ export function renderFooter() {
   `;
 }
 
-// ✅ Call immediately if loaded standalone
-renderFooter();
+

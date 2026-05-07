@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Patient Dashboard — Clinic Management</title>
+  <title>Admin Dashboard — Clinic Management</title>
   <link rel="icon" href="../assets/images/favicon.ico" />
 
   <!-- CSS -->
@@ -23,29 +23,31 @@
 
         <!-- Controls bar -->
         <div class="controls-bar">
-          <input type="text" id="searchBar" class="search-input"
-                 placeholder="Search doctors by name…" />
+          <input type="text" id="searchBar" class="search-input" placeholder="Search doctors by name…" />
 
-          <select class="filter-select" id="filterTime">
+          <select id="filterTime" class="filter-select">
             <option value="">All Times</option>
             <option value="AM">Morning (AM)</option>
             <option value="PM">Afternoon (PM)</option>
           </select>
 
-          <select class="filter-select" id="filterSpecialty">
+          <select id="filterSpecialty" class="filter-select">
             <option value="">All Specialties</option>
             <option value="Cardiology">Cardiology</option>
             <option value="Dermatology">Dermatology</option>
             <option value="Pediatrics">Pediatrics</option>
             <option value="Neurology">Neurology</option>
             <option value="Orthopedics">Orthopedics</option>
-            <option value="General">General Medicine</option>
+            <option value="General">General</option>
           </select>
+
+          <button id="addDocBtn" class="btn-primary">+ Add Doctor</button>
         </div>
 
         <!-- Doctor Cards Grid -->
-        <div id="content" class="cards-grid"></div>
-
+        <div id="content" class="cards-grid">
+          <p class="loading-text">Loading doctors…</p>
+        </div>
       </main>
 
       <!-- Dynamic Footer -->
@@ -53,16 +55,14 @@
     </div>
   </div>
 
-  <!-- Reusable Modal -->
+  <!-- Modal -->
   <div id="modal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <div id="modal-body"></div>
-    </div>
+    <span id="closeModal" class="close">&times;</span>
+    <div id="modal-body"></div>
   </div>
 
-  <!-- Entry point (single import) -->
-  <script type="module" src="../js/patientDashboard.js"></script>
+  <!-- Entry point -->
+  <script type="module" src="../js/adminDashboard.js"></script>
 
 </body>
 </html>

@@ -31,7 +31,8 @@ public class PatientController {
         if (!service.validateToken(token, "patient")) {
             return ResponseEntity.badRequest().body(Map.of("error", "Invalid token!"));
         }
-        return ResponseEntity.ok(patientService.getPatientDetails(token));
+        return patientService.getPatientDetails(token);
+
     }
 
     /**

@@ -2,6 +2,7 @@
  * header.js
  * Reusable dynamic header for all pages
  */
+import { openModal } from "./modals.js";
 
 export function renderHeader() {
     const headerDiv = document.getElementById("header");

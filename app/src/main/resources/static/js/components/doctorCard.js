@@ -3,83 +3,82 @@
  * Creates a reusable doctor card for Admin & Patient dashboards.
  */
 
-import { deleteDoctor } from "../services/doctorServices.js";
-import { getPatientData } from "../services/patientServices.js";
+import { deleteDoctor }    from "../services/doctorServices.js";
+import { getPatientData }  from "../services/patientServices.js";
 import { showBookingOverlay } from "./modals.js";
 
 export function createDoctorCard(doctor) {
-  // Create the main card container
   const card = document.createElement("div");
   card.classList.add("doctor-card");
 
-  // Get the user's role from localStorage
   const role = localStorage.getItem("userRole");
 
-  // Create the info section
+  // ── Info section ────────────────────────────────────────────
   const infoDiv = document.createElement("div");
   infoDiv.classList.add("doctor-info");
 
-  const name = document.createElement("h3");
-  name.textContent = doctor.name;
+  // Name
+  const nameEl = document.createElement("h3");
+  nameEl.textContent = doctor.name;
 
-  const specialization = document.createElement("p");
-  specialization.textContent = `Specialization: ${doctor.specialization}`;
+  // Specialty — model field is `specialty`, not `specialization`
+  const specEl = document.createElement("p");
+  specEl.innerHTML = `<span>Specialty:</span> ${doctor.specialty || "—"}`;
 
-  const email = document.createElement("p");
-  email.textContent = `Email: ${doctor.email}`;
+  // Email
+  const emailEl = document.createElement("p");
+  emailEl.innerHTML = `<span>Email:</span> ${doctor.email}`;
 
-  const availability = document.createElement("p");
-  availability.textContent = `Availability: ${doctor.availability.join(", ")}`;
+  // Available times — model field is `availableTimes`, not `availability`
+  const times = doctor.availableTimes || [];
+  const timesEl = document.createElement("p");
+  timesEl.innerHTML = `<span>Available:</span> ${times.length ? times.join(", ") : "Not set"}`;
 
-  infoDiv.appendChild(name);
-  infoDiv.appendChild(specialization);
-  infoDiv.appendChild(email);
-  infoDiv.appendChild(availability);
+  infoDiv.append(nameEl, specEl, emailEl, timesEl);
 
-  // Create the actions section
+  // ── Action buttons ───────────────────────────────────────────
   const actionsDiv = document.createElement("div");
   actionsDiv.classList.add("card-actions");
 
-  // Conditionally add buttons based on role
   if (role === "admin") {
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "Delete";
+    removeBtn.classList.add("btn-delete");
     removeBtn.addEventListener("click", async () => {
-      if (confirm(`Are you sure you want to delete Dr. ${doctor.name}?`)) {
-        const token = localStorage.getItem("token");
-        const success = await deleteDoctor(doctor.id, token);
-        if (success) {
-          card.remove();
-          alert(`Dr. ${doctor.name} deleted successfully.`);
-        } else {
-          alert("Failed to delete doctor. Please try again.");
-        }
+      if (!confirm(`Delete Dr. ${doctor.name}?`)) return;
+      const token = localStorage.getItem("token");
+      const result = await deleteDoctor(doctor.id, token);  // returns {success, message}
+      if (result.success) {
+        card.remove();
+      } else {
+        alert("Failed to delete: " + (result.message || "Unknown error"));
       }
     });
     actionsDiv.appendChild(removeBtn);
 
   } else if (role === "patient") {
-    const bookNow = document.createElement("button");
-    bookNow.textContent = "Book Now";
-    bookNow.addEventListener("click", () => {
-      alert("Please log in to book an appointment.");
+    // Not logged in — prompt to log in
+    const bookBtn = document.createElement("button");
+    bookBtn.textContent = "Book Now";
+    bookBtn.classList.add("btn-book");
+    bookBtn.addEventListener("click", () => {
+      alert("Please log in as a patient to book an appointment.");
     });
-    actionsDiv.appendChild(bookNow);
+    actionsDiv.appendChild(bookBtn);
 
   } else if (role === "loggedPatient") {
-    const bookNow = document.createElement("button");
-    bookNow.textContent = "Book Now";
-    bookNow.addEventListener("click", async (e) => {
+    // Logged-in patient — show booking modal
+    const bookBtn = document.createElement("button");
+    bookBtn.textContent = "Book Now";
+    bookBtn.classList.add("btn-book");
+    bookBtn.addEventListener("click", async (e) => {
       const token = localStorage.getItem("token");
       const patientData = await getPatientData(token);
       showBookingOverlay(e, doctor, patientData);
     });
-    actionsDiv.appendChild(bookNow);
+    actionsDiv.appendChild(bookBtn);
   }
 
-  // Assemble the card
-  card.appendChild(infoDiv);
-  card.appendChild(actionsDiv);
-
+  card.append(infoDiv, actionsDiv);
   return card;
 }

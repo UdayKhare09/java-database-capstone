@@ -38,10 +38,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
        // ✅ 3. Delete all by doctor ID
        @Modifying
        @Transactional
-       void deleteAllByDoctorId(Long doctorId);
+       void deleteAllByDoctor_Id(Long doctorId);
 
        // ✅ 4. Find all appointments for a patient
-       List<Appointment> findByPatientId(Long patientId);
+       List<Appointment> findByPatient_Id(Long patientId);
 
        // ✅ 5. Find patient appointments by status, ordered by appointment time
        List<Appointment> findByPatient_IdAndStatusOrderByAppointmentTimeAsc(Long patientId, int status);

@@ -49,7 +49,7 @@ public class PatientService {
         Optional<Patient> patientOpt = patientRepository.findByEmail(email);
 
         if (patientOpt.isPresent() && Objects.equals(patientOpt.get().getId(), id)) {
-            List<Appointment> appointments = appointmentRepository.findByPatientId(id);
+            List<Appointment> appointments = appointmentRepository.findByPatient_Id(id);
             List<AppointmentDTO> dtos = appointments.stream()
                     .map(app -> new AppointmentDTO(
                         app.getId(),
@@ -77,7 +77,7 @@ public class PatientService {
      */
     public ResponseEntity<Map<String, Object>> filterByCondition(String condition, Long id) {
         Map<String, Object> response = new HashMap<>();
-        List<Appointment> appointments = appointmentRepository.findByPatientId(id);
+        List<Appointment> appointments = appointmentRepository.findByPatient_Id(id);
 
         LocalDateTime now = LocalDateTime.now();
         List<Appointment> filtered;
@@ -116,7 +116,7 @@ public class PatientService {
      */
     public ResponseEntity<Map<String, Object>> filterByDoctor(String name, Long patientId) {
         Map<String, Object> response = new HashMap<>();
-        List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+        List<Appointment> appointments = appointmentRepository.findByPatient_Id(patientId);
 
         List<Appointment> filtered = appointments.stream()
                 .filter(app -> app.getDoctorName().toLowerCase().contains(name.toLowerCase()))
@@ -147,7 +147,7 @@ public class PatientService {
     public ResponseEntity<Map<String, Object>> filterByDoctorAndCondition(String condition, String name,
             long patientId) {
         Map<String, Object> response = new HashMap<>();
-        List<Appointment> appointments = appointmentRepository.findByPatientId(patientId);
+        List<Appointment> appointments = appointmentRepository.findByPatient_Id(patientId);
 
         LocalDateTime now = LocalDateTime.now();
         List<Appointment> filtered = appointments.stream()

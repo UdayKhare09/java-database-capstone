@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor Dashboard — Clinic Management</title>
+  <link rel="icon" href="../assets/images/favicon.ico" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/adminDashboard.css" />
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="wrapper">
+
+      <!-- Dynamic Header -->
+      <div id="header"></div>
+
+      <!-- Main Content -->
+      <main class="dashboard-main">
+
+        <!-- Controls bar -->
+        <div class="controls-bar">
+          <input type="text" id="searchBar" class="search-input" placeholder="Search patients by name…" />
+
+          <input type="date" id="datePicker" class="date-picker" />
+
+          <button id="todayButton" class="btn-secondary">Today</button>
+        </div>
+
+        <!-- Appointments Table -->
+        <div class="table-wrapper">
+          <table class="appointments-table">
+            <thead>
+              <tr>
+                <th>Patient</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Condition</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="patientTableBody">
+              <tr><td colspan="5" class="loading-text">Loading appointments…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </main>
+
+      <!-- Dynamic Footer -->
+      <div id="footer"></div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal">
+    <span id="closeModal" class="close">&times;</span>
+    <div id="modal-body"></div>
+  </div>
+
+  <!-- Entry point -->
+  <script type="module" src="../js/doctorDashboard.js"></script>
+
+</body>
+</html>

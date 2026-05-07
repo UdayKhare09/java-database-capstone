@@ -5,27 +5,27 @@ import { API_BASE_URL } from "../config/config.js";
 
 const DOCTOR_API = API_BASE_URL + '/doctor';
 
-// ✅ Get all doctors
+// ✅ Get all doctors — response: { doctors: [...] }
 export async function getDoctors() {
   try {
     const response = await fetch(DOCTOR_API);
     if (response.ok) {
-      const doctors = await response.json();
-      return doctors;
+      const data = await response.json();
+      return data.doctors || data; // unwrap {doctors:[]} wrapper
     } else {
-      console.error("Failed to fetch doctors:", response.status);
+      console.error('Failed to fetch doctors:', response.status);
       return [];
     }
   } catch (error) {
-    console.error("Error fetching doctors:", error);
+    console.error('Error fetching doctors:', error);
     return [];
   }
 }
 
-// ✅ Delete a doctor by ID
+// ✅ Delete a doctor by ID — DELETE /doctor/{id}/{token}
 export async function deleteDoctor(id, token) {
   try {
-    const response = await fetch(`${DOCTOR_API}/${id}?token=${token}`, {
+    const response = await fetch(`${DOCTOR_API}/${id}/${token}`, {
       method: 'DELETE'
     });
     if (response.ok) {
@@ -49,10 +49,10 @@ export async function deleteDoctor(id, token) {
   }
 }
 
-// ✅ Save (Add) a new doctor
+// ✅ Save (Add) a new doctor — POST /doctor/{token}
 export async function saveDoctor(doctor, token) {
   try {
-    const response = await fetch(`${DOCTOR_API}?token=${token}`, {
+    const response = await fetch(`${DOCTOR_API}/${token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -80,25 +80,20 @@ export async function saveDoctor(doctor, token) {
   }
 }
 
-// ✅ Filter doctors by name, time, specialty
+// ✅ Filter doctors — GET /doctor/filter/{name}/{time}/{speciality}
 export async function filterDoctors(name, time, specialty) {
+  const n = encodeURIComponent(name      || 'null');
+  const t = encodeURIComponent(time      || 'null');
+  const s = encodeURIComponent(specialty || 'null');
   try {
-    // Use query params for flexibility
-    const queryParams = new URLSearchParams();
-    if (name) queryParams.append("name", name);
-    if (time) queryParams.append("time", time);
-    if (specialty) queryParams.append("specialty", specialty);
-
-    const response = await fetch(`${DOCTOR_API}/filter?${queryParams.toString()}`);
+    const response = await fetch(`${DOCTOR_API}/filter/${n}/${t}/${s}`);
     if (response.ok) {
-      const doctors = await response.json();
-      return doctors;
-    } else {
-      console.error("Failed to filter doctors:", response.status);
-      return [];
+      return await response.json();
     }
+    console.error('Failed to filter doctors:', response.status);
+    return [];
   } catch (error) {
-    console.error("Error filtering doctors:", error);
+    console.error('Error filtering doctors:', error);
     return [];
   }
 }

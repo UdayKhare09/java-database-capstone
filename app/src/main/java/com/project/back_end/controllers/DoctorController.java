@@ -4,12 +4,15 @@ import com.project.back_end.DTO.Login;
 import com.project.back_end.models.Doctor;
 import com.project.back_end.services.DoctorService;
 import com.project.back_end.services.ServiceClass;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("${api.path}doctor")
@@ -53,7 +56,7 @@ public class DoctorController {
      */
     @PostMapping("/{token}")
     public ResponseEntity<?> addDoctor(
-            @RequestBody Doctor doctor,
+            @Valid @RequestBody Doctor doctor,
             @PathVariable String token) {
 
         if (!service.validateToken(token, "admin")) {
@@ -83,7 +86,7 @@ public class DoctorController {
      */
     @PutMapping("/{token}")
     public ResponseEntity<?> updateDoctor(
-            @RequestBody Doctor doctor,
+            @Valid @RequestBody Doctor doctor,
             @PathVariable String token) {
 
         if (!service.validateToken(token, "admin")) {
@@ -132,6 +135,17 @@ public class DoctorController {
             @PathVariable String speciality) {
 
         return ResponseEntity.ok(service.filterDoctor(name, time, speciality));
+    }
+
+    /**
+     * ✅ 8. Handle @Valid validation errors — returns 400 with field messages
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
+        String errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
+                .collect(Collectors.joining("; "));
+        return ResponseEntity.badRequest().body(Map.of("error", errors));
     }
 
 }

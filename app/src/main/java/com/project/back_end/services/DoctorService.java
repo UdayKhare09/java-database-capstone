@@ -95,7 +95,7 @@ public class DoctorService {
     public int deleteDoctor(long id) {
         Optional<Doctor> existing = doctorRepository.findById(id);
         if (existing.isPresent()) {
-            appointmentRepository.deleteAllByDoctorId(id);
+            appointmentRepository.deleteAllByDoctor_Id(id);
             doctorRepository.deleteById(id);
             return 1;
         } else {

@@ -2,34 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Clinic Management System - Home</title>
   <link rel="icon" href="./assets/images/favicon.ico" />
-  
+
   <!-- CSS -->
   <link rel="stylesheet" href="./assets/css/index.css" />
   <link rel="stylesheet" href="./assets/css/style.css" />
-
-  <!-- Utility JS -->
-  <script src="./assets/js/util.js" defer></script>
-  <script src="./assets/js/render.js" defer></script>
-
-  <!-- Components JS -->
-  <script src="./assets/js/components/header.js" defer></script>
-  <script src="./assets/js/components/footer.js" defer></script>
 </head>
 
 <body>
   <div class="container">
     <div class="wrapper">
-      
+
       <!-- Header placeholder -->
       <div id="header"></div>
-      
+
       <!-- Main Content -->
       <main class="main-content">
         <h2>Select Your Role</h2>
-        <button id="adminBtn" onclick="selectRole('admin')">Admin</button>
-        <button id="doctorBtn" onclick="selectRole('doctor')">Doctor</button>
+        <button id="adminBtn"   onclick="selectRole('admin')">Admin</button>
+        <button id="doctorBtn"  onclick="selectRole('doctor')">Doctor</button>
         <button id="patientBtn" onclick="selectRole('patient')">Patient</button>
       </main>
 
@@ -45,7 +38,10 @@
     </div> <!-- end wrapper -->
   </div> <!-- end container -->
 
-  <!-- Main service logic -->
-  <script type="module" src="./assets/js/services/index.js" defer></script>
+  <!--
+    Single module entry point.
+    All imports (render, modals, header, footer, API handlers) flow from here.
+  -->
+  <script type="module" src="./js/services/index.js"></script>
 </body>
 </html>

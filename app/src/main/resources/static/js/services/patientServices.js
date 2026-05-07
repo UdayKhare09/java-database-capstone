@@ -51,19 +51,19 @@ export async function patientLogin(data) {
   }
 }
 
-// ✅ Get current patient data using token
+// ✅ Get current patient data — GET /patient/{token}
+// Response: { patient: { id, name, email, ... } }
 export async function getPatientData(token) {
   try {
-    const response = await fetch(`${PATIENT_API}?token=${token}`);
+    const response = await fetch(`${PATIENT_API}/${token}`);
     if (response.ok) {
-      const patient = await response.json();
-      return patient;
-    } else {
-      console.error("Failed to fetch patient data:", response.status);
-      return null;
+      const data = await response.json();
+      return data.patient || data; // unwrap { patient: {...} } wrapper
     }
+    console.error('Failed to fetch patient data:', response.status);
+    return null;
   } catch (error) {
-    console.error("Error fetching patient data:", error);
+    console.error('Error fetching patient data:', error);
     return null;
   }
 }
